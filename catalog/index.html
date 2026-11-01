@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <!--#include head-->
+    <title>Каталог авто — Rezar Group</title>
+    <meta name="description" content="Каталог Rezar Group: авто в наявності та в дорозі, нові надходження й архів проданих. Фільтри за маркою, моделлю, роком, ціною та пробігом." />
+    <link rel="canonical" href="https://rezar.example/catalog/" />
+    <script>
+      /* start the catalog data with the HTML, not after the JS bundles: src/lib/api.js takes these exact requests
+         from window.__rzPre (the first cards are this page's LCP) */
+      try {
+        (function (P, B) {
+          var f = function (p, o) { P[p] = fetch(B + p, Object.assign({ credentials: 'omit' }, o)); };
+          f('meta.json');
+          /* the default view's first 24 cards come from first.json; the whole catalogue (filters, counts, next pages)
+             follows at low priority so it does not compete with the first photos */
+          var back = false;
+          try { back = performance.getEntriesByType('navigation')[0].type === 'back_forward'; } catch (e) {}
+          if (!back && !/[?&](make|model|year_|price_|km_|section|sort|fav)=/.test(location.search)) {
+            f('first.json');
+            /* preload the first row's photos before any module runs — same srcset / sizes as the grid
+               (src/lib/photo.js photoUrl + src/pages/catalog/media.js CAT_SIZES; scripts/check-logic.mjs guards both) */
+            P['first.json'].then(function (r) { return r.clone().json(); }).then(function (j) {
+              var U = function (id, w, h) { return 'https://images.unsplash.com/photo-' + id + '?w=' + w + '&h=' + h + '&fit=crop&crop=entropy&auto=format&q=70'; };
+              var S = '(min-width: 1520px) 340px, (min-width: 1280px) 23vw, (min-width: 1024px) 31vw, (min-width: 768px) 46vw, (min-resolution: 2.5dppx) 30vw, 46vw';
+              j.items.slice(0, matchMedia('(max-width: 767px)').matches ? 2 : 3).forEach(function (c, i) {
+                if (!c.photo) return;
+                var l = document.createElement('link');
+                l.rel = 'preload'; l.as = 'image';
+                if (!i) l.fetchPriority = 'high';
+                l.imageSrcset = [320, 480, 640, 800, 1000].map(function (w) { return U(c.photo, w, Math.round(w / (4 / 3))) + ' ' + w + 'w'; }).join(', ');
+                l.imageSizes = S;
+                document.head.appendChild(l);
+              });
+              window.__rzCardsPre = true;
+            }).catch(function () {});
+          }
+          f('catalog.json', { priority: 'low' });
+        })(window.__rzPre = {}, '%BASE%data/');
+      } catch (e) {}
+    </script>
+    <script type="module" src="/src/pages/catalog/main.js"></script>
+  </head>
+  <body data-page="catalog" data-tone="ink">
+    <!--#include header-->
+    <main id="main" class="cat-page">
+      <!-- Page head: breadcrumbs · last successful sync · title (changes with «Розділ») · count · «Розділ» tabs -->
+      <section class="phero cat-head">
+        <div class="container">
+          <nav class="crumbs" aria-label="Навігація"><ol><li><a href="%BASE%">Головна</a></li><li><span aria-current="page">Каталог</span></li></ol></nav>
+          <p class="label phero__label cat-sync" data-cat-sync hidden>
+            <span class="label__dot"></span>
+            <span class="label__text">Каталог оновлено <time data-cat-sync-time></time></span>
+          </p>
+          <div class="cat-head__row">
+            <h1 class="phero__title t-h1" data-cat-title>Каталог авто</h1>
+            <p class="phero__lede cat-head__lede">
+              <span data-cat-lede>Авто в наявності та в дорозі.</span>
+              <span class="cat-head__note">Наявність і ціну менеджер підтверджує перед оформленням замовлення.</span>
+            </p>
+          </div>
+
+          <!-- «Розділ» (brief §7): links work without JS and are crawlable; JS switches them in place. Lime pill = you are here. -->
+          <nav class="cat-tabs" aria-label="Розділ каталогу" data-cat-tabs data-lenis-prevent>
+            <div class="cat-tabs__track">
+              <span class="cat-tabs__pill" aria-hidden="true" data-cat-pill></span>
+              <a class="cat-tab" href="%BASE%catalog/" data-section="all" aria-current="page"><span>Усі авто</span><sup data-count="all"></sup></a>
+              <a class="cat-tab" href="%BASE%catalog/?section=new" data-section="new"><span>Нові надходження</span><sup data-count="new"></sup></a>
+              <a class="cat-tab" href="%BASE%catalog/?section=in_stock" data-section="in_stock"><span>Авто в наявності</span><sup data-count="in_stock"></sup></a>
+              <a class="cat-tab" href="%BASE%catalog/?section=in_transit" data-section="in_transit"><span>Авто в дорозі</span><sup data-count="in_transit"></sup></a>
+              <a class="cat-tab" href="%BASE%catalog/?section=sold" data-section="sold"><span>Продано</span><sup data-count="sold"></sup></a>
+            </div>
+          </nav>
+        </div>
+      </section>
+
+      <section class="cat" aria-label="Авто в каталозі">
+        <div class="container cat__wrap">
+          <!-- Filters: a sticky graphite panel from 1280px; below that the same panel is a sheet
+               (bottom sheet on phones, side drawer on tablets / small laptops). -->
+          <div class="cf-backdrop" data-cf-backdrop hidden></div>
+          <aside class="cf" id="catalog-filters" aria-labelledby="cf-title" data-cf>
+            <div class="cf__head" data-cf-grab>
+              <span class="cf__grab" aria-hidden="true"></span>
+              <h2 class="cf__title" id="cf-title">Фільтри</h2>
+              <button class="cf__reset" type="button" data-cf-reset hidden>Скинути</button>
+              <button class="icon-btn cf__close" type="button" data-cf-close aria-label="Закрити фільтри">
+                <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+              </button>
+            </div>
+
+            <form class="cf__body" data-cf-form data-lenis-prevent autocomplete="off" novalidate>
+              <!-- make: search in the list -->
+              <div class="field cf__field">
+                <label class="field__label" for="cf-make">Марка</label>
+                <div class="combo" data-combo>
+                  <svg class="icon combo__icon" aria-hidden="true"><use href="#i-search" /></svg>
+                  <input class="input combo__input" id="cf-make" name="make" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cf-make-list" placeholder="Усі марки" spellcheck="false" enterkeyhint="done" data-combo-input />
+                  <button class="combo__clear" type="button" aria-label="Очистити марку" data-combo-clear hidden>
+                    <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+                  </button>
+                  <ul class="combo__list" id="cf-make-list" role="listbox" aria-label="Марки" data-combo-list data-lenis-prevent hidden></ul>
+                </div>
+              </div>
+
+              <!-- model: appears after a make is chosen -->
+              <div class="cf__reveal" data-cf-model-wrap>
+                <div class="cf__reveal-inner">
+                  <div class="field cf__field">
+                    <label class="field__label" for="cf-model">Модель</label>
+                    <select class="select" id="cf-model" name="model" data-cf-model disabled>
+                      <option value="">Усі моделі</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <fieldset class="field cf__field">
+                <legend class="field__label">Рік випуску</legend>
+                <div class="range">
+                  <select class="select" name="yearFrom" aria-label="Рік від" data-cf-year="from"><option value="">від</option></select>
+                  <select class="select" name="yearTo" aria-label="Рік до" data-cf-year="to"><option value="">до</option></select>
+                </div>
+              </fieldset>
+
+              <fieldset class="field cf__field">
+                <legend class="field__label">Ціна, USD</legend>
+                <div class="range">
+                  <label class="affix"><span class="affix__pre" aria-hidden="true">$</span><input class="input" name="priceFrom" type="text" inputmode="numeric" aria-label="Ціна від, доларів" placeholder="від" data-cf-num /></label>
+                  <label class="affix"><span class="affix__pre" aria-hidden="true">$</span><input class="input" name="priceTo" type="text" inputmode="numeric" aria-label="Ціна до, доларів" placeholder="до" data-cf-num /></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="field cf__field">
+                <legend class="field__label">Пробіг, км</legend>
+                <div class="range">
+                  <input class="input" name="mileageFrom" type="text" inputmode="numeric" aria-label="Пробіг від, кілометрів" placeholder="від" data-cf-num />
+                  <input class="input" name="mileageTo" type="text" inputmode="numeric" aria-label="Пробіг до, кілометрів" placeholder="до" data-cf-num />
+                </div>
+              </fieldset>
+
+              <p class="cf__hint">Ціни — підсумкові, в доларах США, з усіма нашими послугами.</p>
+            </form>
+
+            <div class="cf__foot">
+              <button class="btn btn--outline cf__foot-reset" type="button" data-cf-reset-sheet><span class="btn__label">Скинути</span></button>
+              <button class="btn btn--lime cf__apply" type="button" data-cf-apply><span class="btn__label" data-cf-apply-label>Показати авто</span></button>
+            </div>
+          </aside>
+
+          <div class="cat__main">
+            <!-- toolbar: count · active filter chips · filters button (<1280) · sort -->
+            <div class="cat-bar" data-cat-bar>
+              <p class="cat-bar__count" aria-live="polite" aria-atomic="true"><span class="cat-bar__n" data-cat-n>—</span> <span data-cat-n-word>авто</span></p>
+              <div class="cat-bar__tools">
+                <button class="cat-bar__filters" type="button" aria-controls="catalog-filters" aria-expanded="false" data-cf-open>
+                  <svg class="icon" aria-hidden="true"><use href="#i-filter" /></svg>
+                  <span>Фільтри</span>
+                  <span class="cat-bar__badge" data-cf-badge hidden>0</span>
+                </button>
+                <label class="cat-sort">
+                  <span class="sr-only">Сортування</span>
+                  <svg class="icon cat-sort__icon" aria-hidden="true"><use href="#i-sort" /></svg>
+                  <select class="select cat-sort__select" data-cat-sort></select>
+                </label>
+              </div>
+              <div class="cat-chips" data-cat-chips hidden></div>
+            </div>
+
+            <div class="card-grid cat-grid" data-cat-grid aria-busy="true">
+              <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--title"></span><span class="sk sk--price"></span><span class="sk sk--meta"></span></div></div>
+              <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--title"></span><span class="sk sk--price"></span><span class="sk sk--meta"></span></div></div>
+              <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--title"></span><span class="sk sk--price"></span><span class="sk sk--meta"></span></div></div>
+              <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--title"></span><span class="sk sk--price"></span><span class="sk sk--meta"></span></div></div>
+              <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--title"></span><span class="sk sk--price"></span><span class="sk sk--meta"></span></div></div>
+              <div class="card card--skeleton" aria-hidden="true"><div class="card__media"></div><div class="card__body"><span class="sk sk--title"></span><span class="sk sk--price"></span><span class="sk sk--meta"></span></div></div>
+            </div>
+            <noscript>
+              <div class="state">
+                <p class="state__title">Каталогу потрібен JavaScript</p>
+                <p class="state__text">Увімкніть JavaScript у браузері, щоб переглянути авто, або напишіть менеджеру — він надішле добірку.</p>
+              </div>
+            </noscript>
+            <div class="cat-state" data-cat-state hidden></div>
+            <div class="cat-more" data-cat-more hidden></div>
+            <div class="cat-sentinel" data-cat-sentinel aria-hidden="true"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- floating dock (<1280): filters + back to top once the toolbar has scrolled away -->
+      <div class="cat-dock" data-cat-dock hidden>
+        <button class="cat-dock__btn" type="button" aria-controls="catalog-filters" data-cf-open>
+          <svg class="icon" aria-hidden="true"><use href="#i-filter" /></svg>
+          <span>Фільтри</span>
+          <span class="cat-bar__badge" data-cf-badge hidden>0</span>
+        </button>
+        <button class="cat-dock__btn cat-dock__up" type="button" aria-label="Нагору" data-cat-up>
+          <svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg>
+        </button>
+      </div>
+    </main>
+    <!--#include footer-->
+  </body>
+</html>

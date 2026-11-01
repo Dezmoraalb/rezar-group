@@ -1,0 +1,11 @@
+/* Entry stylesheet (every page imports it first, then its own page CSS).
+   Layer order is fixed here. Page stylesheets (home.css / catalog.css / car.css) are NOT layered, so they win over
+   every layer below without !important — keep them to page layout and page-only components. */
+@layer tokens, base, layout, components, motion;
+
+@import './fonts.css';
+@import './tokens.css' layer(tokens);
+@import './base.css' layer(base);
+@import './layout.css' layer(layout);
+@import './components.css' layer(components);
+@import './motion.css' layer(motion);

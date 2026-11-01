@@ -1,0 +1,185 @@
+/* Base: reset, tones, type roles, links, focus. Ported from VELAR base v3 (+ reset). */
+
+/* ---------- reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { min-height: 100svh; }
+img, svg, video, canvas, picture { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; }
+ul[role='list'], ol[role='list'] { list-style: none; padding: 0; }
+p { overflow-wrap: break-word; }
+summary { cursor: pointer; }
+[hidden] { display: none !important; }
+
+/* ---------- tones ---------- */
+:root,
+[data-tone='light'] {
+  --bg: var(--white);
+  --fg: var(--ink);
+  --muted: var(--muted-light);
+  --tone2: var(--tone2-light);
+  --line: var(--line-light);
+  --line-2: var(--line-strong);
+  --surface: var(--card);
+  --surface-2: var(--white);
+  --surface-hover: var(--card-hover);
+  --focus: var(--ink);
+  --error: var(--error-light);
+}
+[data-tone='grey'] {
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --muted: var(--muted-light);
+  --tone2: var(--tone2-light);
+  --line: var(--line-light);
+  --line-2: var(--line-strong);
+  --surface: var(--white);
+  --surface-2: var(--white);
+  --surface-hover: var(--card);
+  --focus: var(--ink);
+  --error: var(--error-light);
+}
+[data-tone='ink'] {
+  --bg: var(--ink);
+  --fg: var(--paper);
+  --muted: var(--muted-ink);
+  --tone2: var(--muted-ink);
+  --line: var(--line-ink);
+  --line-2: var(--line-ink-strong);
+  --surface: var(--ink-2);
+  --surface-2: var(--ink-3);
+  --surface-hover: var(--ink-3);
+  --focus: var(--lime);
+  --error: var(--error-ink);
+}
+:root,
+[data-tone] {
+  --sh-focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--focus);
+}
+
+html {
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--ff-text);
+  font-size: 100%;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-padding-top: calc(var(--header-space) + var(--s-5));
+}
+/* pages whose body is ink-toned (catalog, car) paint the canvas too, so overscroll never flashes white */
+html:has(body[data-tone='ink']) { background: var(--ink); }
+
+body {
+  background: var(--bg, var(--white));
+  color: var(--fg, var(--ink));
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  overflow-x: clip;
+}
+
+/* Sections paint their own tone. */
+[data-tone] { background-color: var(--bg); color: var(--fg); }
+
+/* ---------- type roles (Display only at 500) ---------- */
+h1, h2, h3,
+.t-hero, .t-hero-s, .t-h1, .t-statement, .t-h2, .t-h3, .t-figure {
+  font-family: var(--ff-display);
+  font-weight: 500;
+  text-wrap: balance;
+}
+.t-hero { font-size: var(--fs-hero); line-height: 0.94; letter-spacing: -0.02em; text-transform: uppercase; }
+.t-hero-s { font-size: var(--fs-hero-s); line-height: 0.96; letter-spacing: -0.02em; text-transform: uppercase; }
+h1, .t-h1 { font-size: var(--fs-h1); line-height: 1; letter-spacing: -0.03em; }
+.t-statement { font-size: var(--fs-statement); line-height: 1.08; letter-spacing: -0.025em; }
+h2, .t-h2 { font-size: var(--fs-h2); line-height: 1.08; letter-spacing: -0.02em; }
+h3, .t-h3 { font-size: var(--fs-h3); line-height: 1.2; letter-spacing: -0.01em; }
+.t-figure { font-size: var(--fs-figure); line-height: 1; letter-spacing: -0.03em; }
+/* never split a word inside a heading (Ukrainian auto-hyphenation reads as broken) */
+h1, h2, h3, h4, summary { hyphens: manual; overflow-wrap: normal; }
+summary { text-wrap: balance; }
+@media (max-width: 400px) {
+  h1, .t-h1 { font-size: min(var(--fs-h1), 10.4vw); }
+}
+
+.t-lead { font-size: var(--fs-lead); line-height: 1.45; font-weight: 400; }
+.t-body { font-size: var(--fs-body); line-height: 1.55; }
+.t-small { font-size: var(--fs-small); line-height: 1.5; }
+.t-meta { font-size: var(--fs-meta); line-height: 1.4; color: var(--muted); }
+.t-label { font-family: var(--ff-text); font-size: var(--fs-label); line-height: 1.3; font-weight: 500; }
+.t-muted { color: var(--muted); }
+/* two-tone headings: <h2>Авто з Європи <span class="soft">під ключ</span></h2> */
+.soft { color: var(--tone2); }
+
+p { text-wrap: pretty; }
+strong, b { font-weight: 600; }
+/* No tabular-nums: Fixel's tnum digits have a slashed zero. */
+
+/* ---------- links ---------- */
+a { text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+
+/* ---------- focus ---------- */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection { background: var(--lime); color: var(--ink); }
+
+/* ---------- skip link ---------- */
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  left: var(--margin);
+  top: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-sm);
+  background: var(--ink);
+  color: var(--white);
+  font-weight: 500;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible { transform: none; outline-color: var(--lime); }
+
+/* ---------- utilities ---------- */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.nowrap { white-space: nowrap; }
+.center { text-align: center; }
+.mt-0 { margin-top: 0 !important; }
+.mt-4 { margin-top: var(--s-4); }
+.mt-5 { margin-top: var(--s-5); }
+.mt-6 { margin-top: var(--s-6); }
+.mt-7 { margin-top: var(--s-7); }
+.mt-8 { margin-top: var(--s-8); }
+.only-desktop { display: none; }
+@media (min-width: 1024px) {
+  .only-desktop { display: revert; }
+  .only-mobile { display: none !important; }
+}
+@media (max-width: 767px) {
+  .hide-phone { display: none !important; }
+}
+@media (min-width: 768px) {
+  .only-phone { display: none !important; }
+}
+/* demo placeholders (real contacts unknown): a faint dotted underline in dev, so nobody ships them by accident */
+[data-placeholder] { text-decoration-style: dotted; }
+
+html.is-scroll-locked { overflow: hidden; }

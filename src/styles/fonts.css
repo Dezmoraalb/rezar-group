@@ -1,0 +1,109 @@
+/* Fixel (MacPaw, SIL OFL 1.1 — src/assets/fonts/OFL.txt). Latin + Cyrillic subset, woff2 only.
+   Display: 500 only (headings). Text: 400 / 500 / 600. font-display: swap + metric-matched fallbacks, so the swap
+   does not reflow the page (CLS). Fallback overrides = capsize formula on Fixel's metrics (upm 1000, asc 900,
+   desc -190, gap 290, per-weight xAvgCharWidth), Roboto values ported from VELAR (measured on Cyrillic copy),
+   Arial values = the Roboto ones rescaled by the Roboto/Arial average-width ratio (911/904 per 2048 upm). */
+@font-face {
+  font-family: 'Fixel Display';
+  src: url('../assets/fonts/FixelDisplay-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fixel Text';
+  src: url('../assets/fonts/FixelText-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fixel Text';
+  src: url('../assets/fonts/FixelText-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fixel Text';
+  src: url('../assets/fonts/FixelText-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---- Arial-based fallbacks (desktop, iOS) ---- */
+@font-face {
+  font-family: 'Fixel Display fallback Arial';
+  src: local('Arial'), local('ArialMT');
+  font-weight: 500;
+  size-adjust: 107.48%;
+  ascent-override: 83.74%;
+  descent-override: 17.68%;
+  line-gap-override: 26.98%;
+}
+@font-face {
+  font-family: 'Fixel Text fallback Arial';
+  src: local('Arial'), local('ArialMT');
+  font-weight: 400;
+  size-adjust: 101.83%;
+  ascent-override: 88.38%;
+  descent-override: 18.66%;
+  line-gap-override: 28.48%;
+}
+@font-face {
+  font-family: 'Fixel Text fallback Arial';
+  src: local('Arial'), local('ArialMT');
+  font-weight: 500;
+  size-adjust: 102.62%;
+  ascent-override: 87.7%;
+  descent-override: 18.51%;
+  line-gap-override: 28.26%;
+}
+@font-face {
+  font-family: 'Fixel Text fallback Arial';
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Arial');
+  font-weight: 600;
+  size-adjust: 103.4%;
+  ascent-override: 87.04%;
+  descent-override: 18.38%;
+  line-gap-override: 28.05%;
+}
+
+/* ---- Roboto-based fallbacks (Android has no real Arial) — values from VELAR ---- */
+@font-face {
+  font-family: 'Fixel Display fallback Roboto';
+  src: local('Roboto'), local('Roboto-Regular'), local('Roboto Regular');
+  font-weight: 500;
+  size-adjust: 106.657%;
+  ascent-override: 84.3827%;
+  descent-override: 17.8142%;
+  line-gap-override: 27.19%;
+}
+@font-face {
+  font-family: 'Fixel Text fallback Roboto';
+  src: local('Roboto'), local('Roboto-Regular'), local('Roboto Regular');
+  font-weight: 400;
+  size-adjust: 101.0471%;
+  ascent-override: 89.0674%;
+  descent-override: 18.8031%;
+  line-gap-override: 28.6995%;
+}
+@font-face {
+  font-family: 'Fixel Text fallback Roboto';
+  src: local('Roboto'), local('Roboto-Regular'), local('Roboto Regular');
+  font-weight: 500;
+  size-adjust: 101.8325%;
+  ascent-override: 88.3804%;
+  descent-override: 18.6581%;
+  line-gap-override: 28.4781%;
+}
+@font-face {
+  font-family: 'Fixel Text fallback Roboto';
+  src: local('Roboto'), local('Roboto-Regular'), local('Roboto Regular');
+  font-weight: 600;
+  size-adjust: 102.609%;
+  ascent-override: 87.7116%;
+  descent-override: 18.5169%;
+  line-gap-override: 28.2626%;
+}

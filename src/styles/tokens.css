@@ -1,0 +1,180 @@
+/* REZAR GROUP · design tokens. Ported from the VELAR design system (tokens v3), re-inked for Rezar:
+   VELAR's navy ink #011428 → graphite / near-black (#0E1013 · #16191D · #1F2328), cool greys, the same lime accent.
+   Components read the semantic tone tokens (--bg --fg --muted --tone2 --line --surface --focus), set per
+   [data-tone] (light | grey | ink) in base.css — never raw palette colours.
+   Lime (#CFF6A2) is reserved for the primary CTA and «you are here» markers (label dots, active filter, focus on ink).
+   Breakpoints: phone <768 (tune 360/390) · tablet 768–1023 · laptop 1024–1279 · desktop 1280–1679 (tune 1440)
+   · wide ≥1680 (tune 1920). Owner: SCAFFOLD — builders read these, never redefine them in page CSS. */
+:root {
+  /* palette */
+  --ink: #0e1013;
+  --ink-2: #16191d;
+  --ink-3: #1f2328;
+  --ink-4: #2a2f35;
+  --white: #ffffff;
+  --paper: #f3f5f2;
+  --card: #eceef0;
+  --card-hover: #e3e6e9;
+  --lime: #cff6a2;
+  --lime-2: #b9ec80;
+  --muted-light: #5b6168;
+  --tone2-light: #6b7178; /* second tone of two-tone headlines; ≥4.7:1 on white */
+  --muted-ink: #9aa1a9;
+  --line-light: rgb(14 16 19 / 0.1);
+  --line-strong: rgb(14 16 19 / 0.2);
+  --line-ink: rgb(243 245 242 / 0.1);
+  --line-ink-strong: rgb(243 245 242 / 0.22);
+  --error-light: #b42318;
+  --error-ink: #ff9c8f;
+
+  /* status colours (photo badges) — calm, never the lime */
+  --st-stock: #8fe3b0;
+  --st-transit: #f2c879;
+  --st-sold: #b8bec6;
+
+  /* film grain (2–3 % noise) for photo heroes: inline SVG, no request */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* an even, contrasty graphite veil over photos (no light band at the top, so the header panel stays crisp) */
+  --overlay: linear-gradient(180deg, rgb(14 16 19 / 0.42) 0%, rgb(14 16 19 / 0.3) 40%, rgb(14 16 19 / 0.62) 100%);
+
+  /* fonts: Fixel Display 500 only (headings) · Fixel Text 400/500/600. Metric-matched fallbacks in fonts.css */
+  --ff-display: 'Fixel Display', 'Fixel Display fallback Arial', 'Fixel Display fallback Roboto', Arial, sans-serif;
+  --ff-text: 'Fixel Text', 'Fixel Text fallback Arial', 'Fixel Text fallback Roboto', Arial, sans-serif;
+
+  /* type scale — linear 360 → 1440, second clamp 1440 → 1920 below */
+  --fs-hero: clamp(2.5rem, 0.9167rem + 7.037vw, 7.25rem);
+  --fs-hero-s: clamp(2.25rem, 1.1667rem + 4.8148vw, 5.5rem);
+  --fs-h1: clamp(2.5rem, 1.6667rem + 3.7037vw, 5rem);
+  --fs-statement: clamp(1.875rem, 1.3333rem + 2.4074vw, 3.5rem);
+  --fs-h2: clamp(1.75rem, 1.3333rem + 1.8519vw, 3rem);
+  --fs-h3: clamp(1.3125rem, 1.2083rem + 0.463vw, 1.625rem);
+  --fs-figure: clamp(2.75rem, 2.3333rem + 1.8519vw, 4rem);
+  --fs-price: clamp(1.25rem, 1.1667rem + 0.3704vw, 1.5rem);
+  --fs-lead: clamp(1.125rem, 1.0417rem + 0.3704vw, 1.375rem);
+  --fs-body: clamp(1rem, 0.9583rem + 0.1852vw, 1.125rem);
+  --fs-small: clamp(0.9375rem, 0.9167rem + 0.0926vw, 1rem);
+  --fs-label: clamp(0.9375rem, 0.9167rem + 0.0926vw, 1rem);
+  --fs-meta: 0.875rem;
+  --fs-btn: 1rem;
+
+  /* spacing, 4px base */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --s-10: 8rem;
+  --s-11: 10rem;
+
+  /* rhythm */
+  --section-y: clamp(4rem, 2.6667rem + 5.9259vw, 8rem);
+  --band-y: clamp(4.5rem, 3rem + 6.6667vw, 9rem);
+  --head-gap: clamp(2rem, 1.1667rem + 3.7037vw, 4.5rem);
+
+  /* grid 4 / 8 / 12 */
+  --cols: 4;
+  --gutter: 16px;
+  --margin: 16px;
+  --content-max: 100vw;
+  --max: calc(var(--content-max) + 2 * var(--margin));
+  --measure: 62ch;
+  /* catalog card grid: 2 columns on phones, 3 from 1024 (brief §8) */
+  --card-cols: 2;
+  --card-gap: 10px;
+
+  /* header: floating panel */
+  --header-top: 12px;
+  --header-h: 60px;
+  --header-space: calc(var(--header-top) + var(--header-h));
+
+  /* radii 12–28 (8 for chips / badges) */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-header: 16px;
+  --r-card: 16px;
+
+  /* shadows: only for floating layers (header, dropdowns, sheets) — never to separate sections or cards */
+  --sh-header: 0 1px 0 rgb(14 16 19 / 0.06), 0 10px 30px -14px rgb(14 16 19 / 0.25);
+  --sh-float: 0 24px 60px -24px rgb(0 0 0 / 0.55);
+
+  /* buttons */
+  --btn-h: 56px;
+  --btn-h-sm: 44px;
+
+  /* motion (VELAR easings / durations) */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-card: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --d-fast: 160ms;
+  --d-base: 240ms;
+  --d-card: 320ms;
+  --d-slow: 400ms;
+  --d-reveal: 700ms;
+}
+
+@media (min-width: 480px) {
+  :root { --margin: 24px; --card-gap: 12px; }
+}
+@media (min-width: 768px) {
+  :root {
+    --cols: 8;
+    --gutter: 20px;
+    --margin: 32px;
+    --header-top: 16px;
+    --header-h: 64px;
+    --card-gap: 20px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --cols: 12;
+    --gutter: 24px;
+    --margin: 40px;
+    --card-cols: 3;
+    --card-gap: 24px;
+  }
+}
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  :root { --btn-h: 52px; }
+}
+@media (min-width: 1280px) {
+  :root {
+    --margin: 56px;
+    --content-max: 1440px;
+    --header-top: 20px;
+  }
+}
+@media (min-width: 1440px) {
+  :root {
+    --header-h: 68px;
+    --fs-hero: clamp(7.25rem, 1.25rem + 6.6667vw, 9.25rem);
+    --fs-hero-s: clamp(5.5rem, 1.75rem + 4.1667vw, 6.75rem);
+    --fs-h1: clamp(5rem, 2rem + 3.3333vw, 6rem);
+    --fs-statement: clamp(3.5rem, 2rem + 1.6667vw, 4rem);
+    --fs-h2: clamp(3rem, 1.5rem + 1.6667vw, 3.5rem);
+    --fs-h3: clamp(1.625rem, 1.25rem + 0.4167vw, 1.75rem);
+    --fs-figure: clamp(4rem, 2.5rem + 1.6667vw, 4.5rem);
+    --fs-lead: clamp(1.375rem, 1rem + 0.4167vw, 1.5rem);
+    --fs-body: 1.125rem;
+    --fs-small: 1rem;
+    --fs-label: 1rem;
+    --fs-btn: clamp(1rem, 0.8125rem + 0.2083vw, 1.0625rem);
+    --section-y: clamp(8rem, 3.5rem + 5vw, 9.5rem);
+    --band-y: clamp(9rem, 4.5rem + 5vw, 10.5rem);
+    --head-gap: clamp(4.5rem, 1.5rem + 3.3333vw, 5.5rem);
+  }
+}
+@media (min-width: 1680px) {
+  :root {
+    --gutter: 32px;
+    --margin: 80px;
+    --content-max: 1520px;
+  }
+}

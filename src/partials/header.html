@@ -1,0 +1,62 @@
+<a class="skip-link" href="#main">Перейти до змісту</a>
+<!--#include sprite-->
+<header class="site-header" data-site-header>
+  <div class="site-header__panel">
+    <a class="logo site-header__logo" href="%BASE%" aria-label="Rezar Group — на головну"><!--#include logo--></a>
+
+    <nav class="site-header__nav" aria-label="Головне меню">
+      <ul role="list" class="site-header__list">
+        <li><a class="site-header__link" href="%BASE%catalog/" data-nav="catalog">Каталог</a></li>
+        <li><a class="site-header__link" href="%BASE%catalog/?section=new" data-nav="new">Нові надходження</a></li>
+        <li><a class="site-header__link" href="%BASE%catalog/?section=sold" data-nav="sold">Продані</a></li>
+        <li><a class="site-header__link" href="%BASE%#about" data-nav="about">Про компанію</a></li>
+        <li><a class="site-header__link" href="%BASE%#contacts" data-nav="contacts">Контакти</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a class="icon-btn site-header__fav" href="%BASE%catalog/?fav=1" aria-label="Обрані авто" data-fav-link>
+        <svg class="icon" aria-hidden="true"><use href="#i-heart" /></svg>
+        <span class="site-header__fav-count" data-fav-count hidden>0</span>
+      </a>
+      <a class="btn btn--primary btn--sm site-header__cta" href="https://t.me/rezar_group_placeholder" target="_blank" rel="noopener" data-contact="telegram" data-track="message" data-track-place="header" data-placeholder>
+        <span class="btn__label">Написати менеджеру</span>
+      </a>
+      <button class="icon-btn site-header__menu" type="button" popovertarget="site-menu" data-menu-toggle aria-controls="site-menu">
+        <span class="sr-only">Меню</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-menu" /></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="site-menu" class="menu" popover data-menu role="dialog" aria-modal="true" aria-label="Меню">
+  <div class="menu__bar">
+    <div class="menu__panel">
+      <a class="logo menu__logo" href="%BASE%" aria-label="Rezar Group — на головну"><!--#include logo--></a>
+      <button class="icon-btn site-header__menu" type="button" popovertarget="site-menu" popovertargetaction="hide" data-menu-close>
+        <span class="sr-only">Закрити меню</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="menu__body" aria-label="Меню сайту">
+    <ul role="list" class="menu__links">
+      <li style="--n:0"><a href="%BASE%catalog/" data-nav="catalog"><span>Каталог</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+      <li style="--n:1"><a href="%BASE%catalog/?section=new" data-nav="new"><span>Нові надходження</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+      <li style="--n:2"><a href="%BASE%catalog/?section=in_transit" data-nav="in_transit"><span>Авто в дорозі</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+      <li style="--n:3"><a href="%BASE%catalog/?section=sold" data-nav="sold"><span>Продані</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+      <li style="--n:4"><a href="%BASE%#about" data-nav="about"><span>Про компанію</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+      <li style="--n:5"><a href="%BASE%#contacts" data-nav="contacts"><span>Контакти</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+    </ul>
+    <p class="menu__meta">
+      <a href="tel:+380000000000" data-contact="phone" data-track="call" data-track-place="menu" data-placeholder><span data-contact-text="phone">+380 (XX) XXX-XX-XX</span></a>
+      <span aria-hidden="true"> · </span>
+      <a href="%BASE%catalog/?fav=1" data-fav-link>Обрані</a>
+    </p>
+    <div class="menu__actions">
+      <a class="btn btn--lime btn--full" href="tel:+380000000000" data-contact="phone" data-track="call" data-track-place="menu" data-placeholder><span class="btn__label">Зателефонувати</span></a>
+      <a class="btn btn--outline btn--full" href="https://t.me/rezar_group_placeholder" target="_blank" rel="noopener" data-contact="telegram" data-track="message" data-track-place="menu" data-placeholder><span class="btn__label">Написати</span></a>
+    </div>
+  </nav>
+</div>

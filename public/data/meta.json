@@ -1,0 +1,585 @@
+{
+ "version": 1,
+ "anchor": "2026-11-01T12:00:00.000Z",
+ "lastSyncAt": "2026-11-01T06:26:00.000Z",
+ "syncSlots": [
+  "08:00",
+  "20:00"
+ ],
+ "timezone": "Europe/Kyiv",
+ "total": 1200,
+ "chunkSize": 100,
+ "firstId": 10001,
+ "counts": {
+  "in_stock": 637,
+  "in_transit": 328,
+  "sold": 235
+ },
+ "makes": [
+  {
+   "make": "Audi",
+   "count": 96,
+   "models": [
+    {
+     "model": "A4",
+     "count": 20
+    },
+    {
+     "model": "A5",
+     "count": 4
+    },
+    {
+     "model": "A6",
+     "count": 18
+    },
+    {
+     "model": "A7",
+     "count": 4
+    },
+    {
+     "model": "e-tron",
+     "count": 13
+    },
+    {
+     "model": "Q5",
+     "count": 17
+    },
+    {
+     "model": "Q7",
+     "count": 19
+    },
+    {
+     "model": "Q8",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "make": "BMW",
+   "count": 120,
+   "models": [
+    {
+     "model": "3 Series",
+     "count": 24
+    },
+    {
+     "model": "4 Series",
+     "count": 7
+    },
+    {
+     "model": "5 Series",
+     "count": 21
+    },
+    {
+     "model": "7 Series",
+     "count": 9
+    },
+    {
+     "model": "i4",
+     "count": 7
+    },
+    {
+     "model": "iX3",
+     "count": 4
+    },
+    {
+     "model": "X3",
+     "count": 19
+    },
+    {
+     "model": "X5",
+     "count": 22
+    },
+    {
+     "model": "X6",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "make": "Ford",
+   "count": 74,
+   "models": [
+    {
+     "model": "Escape",
+     "count": 10
+    },
+    {
+     "model": "Expedition",
+     "count": 2
+    },
+    {
+     "model": "Explorer",
+     "count": 10
+    },
+    {
+     "model": "Focus",
+     "count": 12
+    },
+    {
+     "model": "Fusion",
+     "count": 14
+    },
+    {
+     "model": "Mustang",
+     "count": 6
+    },
+    {
+     "model": "Mustang Mach-E",
+     "count": 12
+    },
+    {
+     "model": "Ranger",
+     "count": 8
+    }
+   ]
+  },
+  {
+   "make": "Honda",
+   "count": 28,
+   "models": [
+    {
+     "model": "Accord",
+     "count": 9
+    },
+    {
+     "model": "Civic",
+     "count": 8
+    },
+    {
+     "model": "CR-V",
+     "count": 11
+    }
+   ]
+  },
+  {
+   "make": "Hyundai",
+   "count": 61,
+   "models": [
+    {
+     "model": "Accent",
+     "count": 3
+    },
+    {
+     "model": "Elantra",
+     "count": 8
+    },
+    {
+     "model": "Ioniq 5",
+     "count": 3
+    },
+    {
+     "model": "Kona Electric",
+     "count": 11
+    },
+    {
+     "model": "Santa Fe",
+     "count": 13
+    },
+    {
+     "model": "Sonata",
+     "count": 10
+    },
+    {
+     "model": "Tucson",
+     "count": 13
+    }
+   ]
+  },
+  {
+   "make": "Jeep",
+   "count": 16,
+   "models": [
+    {
+     "model": "Compass",
+     "count": 6
+    },
+    {
+     "model": "Grand Cherokee",
+     "count": 6
+    },
+    {
+     "model": "Wrangler",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "make": "Kia",
+   "count": 54,
+   "models": [
+    {
+     "model": "Ceed",
+     "count": 7
+    },
+    {
+     "model": "EV6",
+     "count": 7
+    },
+    {
+     "model": "K5",
+     "count": 7
+    },
+    {
+     "model": "Niro EV",
+     "count": 9
+    },
+    {
+     "model": "Sorento",
+     "count": 9
+    },
+    {
+     "model": "Sportage",
+     "count": 15
+    }
+   ]
+  },
+  {
+   "make": "Land Rover",
+   "count": 19,
+   "models": [
+    {
+     "model": "Discovery Sport",
+     "count": 7
+    },
+    {
+     "model": "Range Rover Evoque",
+     "count": 6
+    },
+    {
+     "model": "Range Rover Sport",
+     "count": 6
+    }
+   ]
+  },
+  {
+   "make": "Lexus",
+   "count": 34,
+   "models": [
+    {
+     "model": "ES",
+     "count": 11
+    },
+    {
+     "model": "NX",
+     "count": 8
+    },
+    {
+     "model": "RX",
+     "count": 15
+    }
+   ]
+  },
+  {
+   "make": "Mazda",
+   "count": 40,
+   "models": [
+    {
+     "model": "CX-5",
+     "count": 14
+    },
+    {
+     "model": "CX-9",
+     "count": 3
+    },
+    {
+     "model": "CX-30",
+     "count": 8
+    },
+    {
+     "model": "Mazda3",
+     "count": 10
+    },
+    {
+     "model": "Mazda6",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "make": "Mercedes-Benz",
+   "count": 111,
+   "models": [
+    {
+     "model": "C-Class",
+     "count": 32
+    },
+    {
+     "model": "CLA",
+     "count": 8
+    },
+    {
+     "model": "E-Class",
+     "count": 16
+    },
+    {
+     "model": "G-Class",
+     "count": 2
+    },
+    {
+     "model": "GLC",
+     "count": 29
+    },
+    {
+     "model": "GLE",
+     "count": 20
+    },
+    {
+     "model": "S-Class",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "make": "Nissan",
+   "count": 64,
+   "models": [
+    {
+     "model": "Altima",
+     "count": 14
+    },
+    {
+     "model": "Juke",
+     "count": 2
+    },
+    {
+     "model": "Leaf",
+     "count": 20
+    },
+    {
+     "model": "Qashqai",
+     "count": 18
+    },
+    {
+     "model": "X-Trail",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "make": "Opel",
+   "count": 17,
+   "models": [
+    {
+     "model": "Astra",
+     "count": 7
+    },
+    {
+     "model": "Insignia",
+     "count": 10
+    }
+   ]
+  },
+  {
+   "make": "Porsche",
+   "count": 25,
+   "models": [
+    {
+     "model": "911",
+     "count": 3
+    },
+    {
+     "model": "Cayenne",
+     "count": 10
+    },
+    {
+     "model": "Macan",
+     "count": 7
+    },
+    {
+     "model": "Panamera",
+     "count": 2
+    },
+    {
+     "model": "Taycan",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "make": "Renault",
+   "count": 48,
+   "models": [
+    {
+     "model": "Arkana",
+     "count": 6
+    },
+    {
+     "model": "Duster",
+     "count": 15
+    },
+    {
+     "model": "Kadjar",
+     "count": 9
+    },
+    {
+     "model": "Megane",
+     "count": 9
+    },
+    {
+     "model": "Zoe",
+     "count": 9
+    }
+   ]
+  },
+  {
+   "make": "Skoda",
+   "count": 60,
+   "models": [
+    {
+     "model": "Enyaq",
+     "count": 12
+    },
+    {
+     "model": "Kodiaq",
+     "count": 13
+    },
+    {
+     "model": "Octavia",
+     "count": 22
+    },
+    {
+     "model": "Superb",
+     "count": 13
+    }
+   ]
+  },
+  {
+   "make": "Tesla",
+   "count": 95,
+   "models": [
+    {
+     "model": "Model 3",
+     "count": 46
+    },
+    {
+     "model": "Model S",
+     "count": 14
+    },
+    {
+     "model": "Model X",
+     "count": 7
+    },
+    {
+     "model": "Model Y",
+     "count": 28
+    }
+   ]
+  },
+  {
+   "make": "Toyota",
+   "count": 98,
+   "models": [
+    {
+     "model": "Camry",
+     "count": 36
+    },
+    {
+     "model": "Corolla",
+     "count": 9
+    },
+    {
+     "model": "Highlander",
+     "count": 14
+    },
+    {
+     "model": "Land Cruiser Prado",
+     "count": 14
+    },
+    {
+     "model": "RAV4",
+     "count": 19
+    },
+    {
+     "model": "Tacoma",
+     "count": 6
+    }
+   ]
+  },
+  {
+   "make": "Volkswagen",
+   "count": 102,
+   "models": [
+    {
+     "model": "e-Golf",
+     "count": 3
+    },
+    {
+     "model": "Golf",
+     "count": 23
+    },
+    {
+     "model": "ID.4",
+     "count": 16
+    },
+    {
+     "model": "Jetta",
+     "count": 4
+    },
+    {
+     "model": "Passat",
+     "count": 15
+    },
+    {
+     "model": "Polo",
+     "count": 12
+    },
+    {
+     "model": "Tiguan",
+     "count": 24
+    },
+    {
+     "model": "Touareg",
+     "count": 5
+    }
+   ]
+  },
+  {
+   "make": "Volvo",
+   "count": 38,
+   "models": [
+    {
+     "model": "S60",
+     "count": 6
+    },
+    {
+     "model": "XC40",
+     "count": 7
+    },
+    {
+     "model": "XC60",
+     "count": 13
+    },
+    {
+     "model": "XC90",
+     "count": 12
+    }
+   ]
+  }
+ ],
+ "ranges": {
+  "year": [
+   2016,
+   2024
+  ],
+  "price": [
+   6300,
+   120600
+  ],
+  "mileage": [
+   16400,
+   195600
+  ]
+ },
+ "scenes": {
+  "hero": "1618418721668-0d1f72aa4bab",
+  "heroAlt": "1760688962576-1e2ff91424ba",
+  "night": "1768822392574-9946895f063b",
+  "dark": "1561924563-d9ad0f32b23f",
+  "matte": "1787178605268-36282fb87172",
+  "showroom": "1764013290175-2b76e9a00b2e",
+  "showroom2": "1692406069831-0bb7ea297645",
+  "handover": "1653565217811-85b41bcd1edb",
+  "road": "1492144534655-ae79c964c9d7"
+ }
+}

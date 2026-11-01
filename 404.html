@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <!--#include head-->
+    <title>Сторінку не знайдено — Rezar Group</title>
+    <meta name="robots" content="noindex" />
+    <script type="module" src="/src/pages/404.js"></script>
+  </head>
+  <body data-page="404" data-tone="ink">
+    <!--#include header-->
+    <main id="main" class="nf">
+      <div class="container phero">
+        <p class="nf__code" aria-hidden="true">404</p>
+        <h1 class="nf__title t-h2 phero__title">Такої сторінки немає</h1>
+        <p class="nf__text phero__lede">Можливо, авто вже продане або посилання застаріло. Подивіться, що є в наявності зараз.</p>
+        <div class="nf__actions phero__actions">
+          <a class="btn btn--lime" href="%BASE%catalog/"><span class="btn__label">Перейти в каталог</span><svg class="icon btn__arrow" aria-hidden="true"><use href="#i-arrow-right" /></svg></a>
+          <a class="btn btn--outline" href="%BASE%"><span class="btn__label">На головну</span></a>
+        </div>
+      </div>
+      <section class="container nf__fresh" aria-labelledby="nf-fresh-h" data-nf-fresh hidden>
+        <div class="nf__fresh-head">
+          <p class="label"><span class="label__dot" aria-hidden="true"></span><span class="label__text" id="nf-fresh-h">Щойно в наявності</span></p>
+          <a class="btn btn--link nf__fresh-all" href="%BASE%catalog/?section=in_stock"><span class="btn__label">Усі авто в наявності</span><svg class="icon btn__arrow" aria-hidden="true"><use href="#i-arrow-right" /></svg></a>
+        </div>
+        <div class="card-grid nf__grid" data-nf-grid></div>
+      </section>
+    </main>
+    <!--#include footer-->
+  </body>
+</html>

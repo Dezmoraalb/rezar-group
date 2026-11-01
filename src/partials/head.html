@@ -1,0 +1,28 @@
+<meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e1013" />
+    <link rel="icon" href="%BASE%favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://images.unsplash.com" /> <!-- no crossorigin: <img> loads are no-cors, a CORS preconnect would sit unused -->
+    <link rel="preload" href="/src/assets/fonts/FixelDisplay-Medium.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/src/assets/fonts/FixelText-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- cross-document view-transition opt-in inline (motion.css §4 holds the animations): Chrome decides at reveal
+         time, before an external stylesheet may be in — then it aborts the transition with an error -->
+    <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+    <script>
+      /* before first paint: html.js (motion may hide its start frames), html.reduced (reduced motion),
+         html.nav-in (an in-site navigation: the header does not drop in again) */
+      (function (d) {
+        var c = d.documentElement.classList;
+        c.add('js');
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) c.add('reduced');
+        try { if (document.referrer && new URL(document.referrer).origin === location.origin) c.add('nav-in'); } catch (e) {}
+        /* cross-document view transitions (motion.css): Chrome may abort one (e.g. «Назад» restored from bfcache or a
+           fast second click) and rejects its promises — that is harmless, keep it out of the console as an error */
+        var quiet = function (e) {
+          var vt = e.viewTransition;
+          if (vt) ['ready', 'finished', 'updateCallbackDone'].forEach(function (k) { if (vt[k]) vt[k].catch(function () {}); });
+        };
+        addEventListener('pagereveal', quiet);
+        addEventListener('pageswap', quiet);
+      })(document);
+    </script>

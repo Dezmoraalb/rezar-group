@@ -1,0 +1,10 @@
+/* 404 page */
+.nf { min-block-size: 100svh; display: grid; align-content: center; padding-block-end: var(--s-8, 64px); }
+.nf__code { font-family: var(--ff-display); font-weight: 500; font-size: clamp(6rem, 3rem + 14vw, 14rem); line-height: 0.9; letter-spacing: -0.04em; color: var(--ink-4); }
+.nf__title { margin-top: var(--s-5); }
+.nf__text { margin-top: var(--s-4); color: var(--muted); max-inline-size: 44ch; }
+.nf__actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
+.nf__fresh { margin-top: clamp(48px, 6vw, 96px); padding-top: var(--s-6); border-top: 1px solid var(--line); }
+.nf__fresh-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-3); margin-bottom: var(--s-5); }
+/* phones: two cards per row, so the third would sit alone — keep a clean pair */
+@media (max-width: 1023px) { .nf__grid > :nth-child(3) { display: none; } }

@@ -1,0 +1,255 @@
+/* Motion layer — every from/to state of the site's motion (ported from VELAR motion v3, same curves and timings).
+   The HTML is the final frame: all hiding is gated on html.js:not(.reduced) (set before first paint by the inline
+   head script) and scroll reveals on html.mo, which src/motion/reveal.js sets right before it arms the page — if the
+   bundle never runs, nothing below the fold is ever hidden. Only transform / translate / scale / opacity / clip-path
+   animate. No scroll-jacking; nothing ever blocks input.
+
+   1. Hero intro (CSS, starts with the first paint)   frame opens + media settles · H1 words rise in masks · copy rises ·
+      header drops in
+   2. Plain page intro (.phero)                       title rises without hiding (it can be the LCP) · copy follows
+   3. Scroll reveals (src/motion/reveal.js flips .is-in)  blocks, groups, split headings, labels, photo frames,
+      ink bands, number rolls
+   4. View transitions between pages (cross-document, CSS only) */
+
+:root {
+  --e-out: cubic-bezier(0.16, 1, 0.3, 1);        /* expo-like out: the house curve for entrances */
+  --e-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* small overshoot for dots and pops */
+  --d-intro: 1100ms;
+}
+
+/* ---------- 1. hero intro ---------- */
+/* the frame that opens to full bleed (reex's media unclip): a ring painted OVER the media (a huge box-shadow around a
+   rounded hole that scales up), not a clip on the photo — the photo is painted full size from the first frame, so it
+   stays the LCP element. Transform + opacity only. Ring colour: --frame (white on the home page). */
+@keyframes hero-frame {
+  0% { transform: scale(var(--frame-x), var(--frame-y)); opacity: 1; }
+  82% { opacity: 1; }
+  100% { transform: none; opacity: 0; }
+}
+@keyframes hero-settle {
+  from { transform: scale(1.18); }
+  to { transform: none; }
+}
+@keyframes word-rise {
+  from { transform: translateY(118%); }
+  to { transform: none; }
+}
+@keyframes copy-rise {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes header-drop {
+  from { transform: translateY(calc(-100% - var(--header-top) - 12px)); }
+  to { transform: none; }
+}
+@keyframes cue-in {
+  from { opacity: 0; translate: 0 -8px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes cue-drop {
+  0%, 100% { transform: translateY(-3px); }
+  50% { transform: translateY(4px); }
+}
+/* word masks: <span class="hw"><span class="hw__i" style="--w:0;--l:0">Word</span></span>.
+   The padding/negative margin pair keeps diacritics (Й, Ї) and descenders inside the mask without moving the layout */
+.hw { display: inline-block; }
+html.js:not(.reduced) .hw {
+  overflow: clip;
+  padding: 0.14em 0.06em 0.12em;
+  margin: -0.14em -0.06em -0.12em;
+}
+.hw__i { display: inline-block; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js:not(.reduced) .hero { --frame-x: 0.86; --frame-y: 0.82; }
+  html.js:not(.reduced) .hero--s { --frame-x: 0.92; --frame-y: 0.88; }
+  html.js:not(.reduced) .hero[data-frame]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: var(--r-lg);
+    box-shadow: 0 0 0 100vmax var(--frame, var(--white));
+    pointer-events: none;
+    animation: hero-frame 1300ms var(--e-out) both;
+  }
+  html.js:not(.reduced) .hero__img { animation: hero-settle 2400ms var(--ease-soft) both; }
+  html.js:not(.reduced) .hero .hw__i { animation: word-rise var(--d-intro) var(--e-out) both; animation-delay: calc(300ms + var(--w, 0) * 65ms); }
+  html.js:not(.reduced) .hero__crumbs { animation: fade-rise 700ms var(--e-out) 200ms both; }
+  html.js:not(.reduced) .hero__eyebrow { animation: fade-rise 700ms var(--e-out) 220ms both; }
+  html.js:not(.reduced) .hero__lede { animation: copy-rise 900ms var(--e-out) 650ms both; }
+  html.js:not(.reduced) .hero__actions { animation: copy-rise 900ms var(--e-out) 780ms both; }
+  html.js:not(.reduced) .hero__facts { animation: copy-rise 900ms var(--e-out) 900ms both; }
+  html.js:not(.reduced) .hero__cue { animation: cue-in 700ms var(--e-out) 1500ms both; }
+  html.js:not(.reduced) .hero__cue i { animation: cue-drop 1600ms cubic-bezier(0.45, 0, 0.55, 1) 2200ms infinite; }
+  html.js:not(.reduced):not(.nav-in) body:has(.hero) .site-header__panel { animation: header-drop 900ms var(--e-out) 350ms both; }
+  html.js:not(.reduced) .hero--s .hw__i { animation-delay: calc(140ms + var(--w, 0) * 55ms); }
+  html.js:not(.reduced) .hero--s .hero__crumbs { animation-delay: 80ms; }
+  html.js:not(.reduced) .hero--s .hero__lede { animation-delay: 490ms; }
+  html.js:not(.reduced) .hero--s .hero__actions { animation-delay: 620ms; }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+  html.js:not(.reduced):not(.nav-in) body:has(.hero) .site-header__panel { animation-delay: 700ms; }
+}
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  html.js:not(.reduced) .hero--l { --frame-x: 0.88; --frame-y: 0.84; }
+  /* from 768 lines are blocks: they lead, words of one line move together */
+  html.js:not(.reduced) .hero--lines .hw__i { animation-delay: calc(300ms + var(--l, 0) * 120ms); }
+  html.js:not(.reduced) .hero--s.hero--lines .hw__i { animation-delay: calc(140ms + var(--l, 0) * 110ms); }
+}
+
+/* ---------- 2. plain page intro (catalog / car / 404: .phero) ---------- */
+@keyframes title-rise {
+  from { transform: translateY(0.45em); }
+  to { transform: none; }
+}
+@keyframes media-unclip {
+  from { clip-path: inset(10% 8% round var(--r-lg)); }
+  to { clip-path: inset(0 round var(--r-lg)); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.js:not(.reduced) .phero .crumbs { animation: fade-rise 700ms var(--e-out) 80ms both; }
+  html.js:not(.reduced) .phero__label { animation: fade-rise 700ms var(--e-out) 140ms both; }
+  html.js:not(.reduced) .phero__title { animation: title-rise 1000ms var(--e-out) 120ms both; }
+  html.js:not(.reduced) .phero__lede { animation: copy-rise 900ms var(--e-out) 380ms both; }
+  html.js:not(.reduced) .phero__actions { animation: copy-rise 900ms var(--e-out) 480ms both; }
+  html.js:not(.reduced) .phero__media { animation: media-unclip 1300ms var(--e-out) 250ms both; }
+}
+
+/* ---------- 3. scroll reveals ---------- */
+/* blocks and groups: rise 40px + fade, groups stagger 60ms (capped at 300ms) */
+html.mo [data-reveal]:not(.is-in):not(.rv-seq),
+html.mo [data-reveal-group]:not(.is-in) > * {
+  opacity: 0;
+  transform: translateY(40px);
+}
+html.mo [data-reveal]:not(.rv-seq),
+html.mo [data-reveal-group] > * {
+  transition:
+    opacity 750ms var(--e-out),
+    transform 750ms var(--e-out);
+}
+html.mo [data-reveal-group] > :nth-child(2) { transition-delay: 60ms; }
+html.mo [data-reveal-group] > :nth-child(3) { transition-delay: 120ms; }
+html.mo [data-reveal-group] > :nth-child(4) { transition-delay: 180ms; }
+html.mo [data-reveal-group] > :nth-child(5) { transition-delay: 240ms; }
+html.mo [data-reveal-group] > :nth-child(n + 6) { transition-delay: 300ms; }
+/* once the entrance is over (.is-done), transitions go back to the components (card hovers keep their own curves) */
+html.mo :is([data-reveal], [data-reveal-group] > *, .rv-seq > .rv-after):is(.is-done, .is-done > *) { transition: revert-layer; }
+html.mo [data-reveal].is-now,
+html.mo [data-reveal-group].is-now > * { transition: none !important; }
+
+/* a block led by its split heading: the heading's lines rise first, the block's other children follow */
+html.mo .rv-seq > .rv-after {
+  transition: opacity 700ms var(--e-out), transform 700ms var(--e-out);
+  transition-delay: calc(180ms + var(--n, 0) * 70ms);
+}
+html.mo .rv-seq:not(.is-in) > .rv-after { opacity: 0; transform: translateY(40px); }
+
+/* split headings: each word in a mask, lines stagger 70ms */
+html.mo .rv-split .mw {
+  display: inline-block;
+  overflow: clip;
+  padding: 0.12em 0.05em 0.14em;
+  margin: -0.12em -0.05em -0.14em;
+}
+html.mo .rv-split .mw__i {
+  display: inline-block;
+  transform: translateY(120%);
+  transition: transform 850ms var(--e-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+html.mo .rv-split.is-in .mw__i { transform: none; }
+
+/* section labels: the lime dot pops, the text slides in */
+html.mo .rv-label .label__dot { transition: transform 700ms var(--e-spring) 80ms; }
+html.mo .rv-label :is(.label__text, .label__index) { transition: opacity 700ms var(--e-out) 160ms, transform 700ms var(--e-out) 160ms; }
+html.mo .rv-label:not(.is-in) .label__dot { transform: scale(0); }
+html.mo .rv-label:not(.is-in) :is(.label__text, .label__index) { opacity: 0; transform: translateX(-12px); }
+
+/* photo frames: the frame unclips, the picture settles from a slight zoom (scale composes with hover transforms) */
+html.mo .rv-media { transition: clip-path 1300ms var(--e-out); }
+html.mo .rv-media img { transition: scale 1700ms var(--e-out); }
+html.mo .rv-media:not(.is-in) { clip-path: inset(9% 7% round var(--r-lg)); }
+html.mo .rv-media:not(.is-in) img { scale: 1.18; }
+html.mo .rv-media.is-in { clip-path: inset(0 round var(--r-lg)); }
+
+/* line icons draw their strokes (pathLength=1 set by motion/core.js drawable) */
+html.mo .rv-draw { transition: opacity 200ms ease; }
+html.mo .rv-draw:not(.is-in) { opacity: 0; }
+html.mo .rv-draw:not(.drawn) :is(path, circle, rect, line, polyline, polygon, ellipse) {
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1100ms var(--ease-in-out);
+  transition-delay: calc(150ms + var(--n, 0) * 110ms);
+}
+html.mo .rv-draw.is-in:not(.drawn) :is(path, circle, rect, line, polyline, polygon, ellipse) { stroke-dashoffset: 0; }
+
+/* ink bands open from a rounded card to full bleed */
+html.mo .rv-band { transition: clip-path 1200ms var(--e-out); }
+html.mo .rv-band:not(.is-in) { clip-path: inset(0 var(--margin) round var(--r-lg)); }
+html.mo .rv-band.is-in { clip-path: inset(0 round 0); }
+html.mo :is(.rv-band, .rv-media).is-done { clip-path: none; }
+
+/* catalog / similar cards appended by infinite scroll: a short rise (cards.js adds .card--enter, then removes it) */
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.js:not(.reduced) .card--enter { animation: card-in 640ms var(--e-out) both; animation-delay: calc(var(--k, 0) * 45ms); }
+  /* first row on load: the photo (LCP) is visible from the first frame and only settles; the text rises */
+  html.js:not(.reduced) .card--enter-body .card__body { animation: card-in 640ms var(--e-out) both; animation-delay: calc(var(--k, 0) * 45ms); }
+  html.js:not(.reduced) .card--enter-body .card__media img { animation: card-photo-in 900ms var(--e-out) both; }
+}
+@keyframes card-photo-in {
+  from { transform: scale(1.06); }
+  to { transform: none; }
+}
+
+/* number rolls (motion/count.js): the number is locked to its final width; until the roll starts the digits wait
+   below the slot's bottom edge, then rise while they count */
+.cnt { display: inline-block; text-align: start; }
+.cnt__i { display: inline-block; }
+html.mo .cnt { clip-path: inset(-0.3em -0.2em 0 -0.2em); }
+html.mo .cnt__i { transition: transform 520ms var(--e-out), opacity 520ms var(--e-out); }
+html.mo .cnt.is-wait .cnt__i { transform: translateY(110%); opacity: 0; }
+
+@media print {
+  html.mo :is([data-reveal], [data-reveal-group] > *, .rv-seq > .rv-after, .rv-split .mw__i, .rv-media, .rv-media img, .rv-band) {
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+  .hero__cue { display: none !important; }
+  .cnt__i { transform: none !important; opacity: 1 !important; }
+}
+
+/* ---------- 4. view transitions between pages ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  /* the header stays put; the page underneath fades through */
+  .site-header { view-transition-name: site-header; }
+  ::view-transition-group(site-header) { animation-duration: 0s; }
+  ::view-transition-old(root) { animation: 180ms ease both vt-out; }
+  ::view-transition-new(root) { animation: 320ms var(--e-out) both vt-in; }
+}
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

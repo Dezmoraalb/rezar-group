@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <!--#include head-->
+    <title>Авто — Rezar Group</title>
+    <meta name="description" content="Авто в каталозі Rezar Group: фото, ціна в доларах, характеристики, комплектація." />
+    <meta property="og:type" content="product" />
+    <meta property="og:site_name" content="Rezar Group" />
+    <meta property="og:title" content="Авто — Rezar Group" />
+    <meta property="og:description" content="Авто в каталозі Rezar Group: фото, ціна в доларах, характеристики, комплектація." />
+    <script>
+      /* start the car data with the HTML: meta, then this car's detail chunk (it carries every field the page shows)
+         as soon as meta says where it lives. src/lib/api.js takes these exact requests from window.__rzPre (the main
+         photo is the LCP and can only be chosen once the car is known). The whole catalogue is only loaded later, for
+         «Схожі автомобілі» on sold cars */
+      try {
+        (function (P, B) {
+          var f = function (p) { return (P[p] = fetch(B + p, { credentials: 'omit' })); };
+          f('meta.json').then(function (r) { return r.clone().json(); }).then(function (m) {
+            var id = Number(new URLSearchParams(location.search).get('id'));
+            var n = Math.floor((id - m.firstId) / m.chunkSize);
+            if (n >= 0 && n < Math.ceil(m.total / m.chunkSize))
+              f('cars/' + n + '.json').then(function (r) { return r.ok ? r.clone().json() : null; }).then(function (j) {
+                if (!j) return;
+                window.__rzChunk = j;
+                /* preload the first gallery photo right here, before any module runs — same srcset / sizes as
+                   src/pages/car/gallery.js (URL = src/lib/photo.js photoUrl; scripts/check-logic.mjs guards U) */
+                var c = j.filter(function (x) { return x.id === id; })[0];
+                var ph = c && c.gallery && c.gallery[0];
+                if (ph) {
+                  var U = function (id, w, h) { return 'https://images.unsplash.com/photo-' + id + '?w=' + w + '&h=' + h + '&fit=crop&crop=entropy&auto=format&q=70'; };
+                  var l = document.createElement('link');
+                  l.rel = 'preload'; l.as = 'image'; l.fetchPriority = 'high';
+                  l.imageSrcset = [640, 960, 1280, 1600, 2000].map(function (w) { return U(ph, w, Math.round(w / 1.5)) + ' ' + w + 'w'; }).join(', ');
+                  l.imageSizes = '(min-width: 1520px) 900px, (min-width: 1280px) 62vw, (min-width: 1024px) 58vw, 100vw';
+                  document.head.appendChild(l);
+                  window.__rzStagePre = true;
+                }
+                dispatchEvent(new Event('rz:chunk'));
+              }).catch(function () {});
+          }).catch(function () {});
+        })(window.__rzPre = {}, '%BASE%data/');
+      } catch (e) {}
+    </script>
+    <script type="module" src="/src/pages/car/main.js"></script>
+  </head>
+  <body data-page="car" data-tone="ink">
+    <!--#include header-->
+    <main id="main" class="car" data-car-root aria-busy="true">
+      <!-- Car page (brief §11, §16). Route: car/?id=<id>. Everything below is filled by src/pages/car/main.js;
+           the skeleton keeps the final geometry so nothing jumps when the data arrives. -->
+      <section class="vh" aria-labelledby="car-title">
+        <div class="container">
+          <nav class="crumbs vh__crumbs" aria-label="Навігація">
+            <ol>
+              <li><a href="%BASE%">Головна</a></li>
+              <li><a href="%BASE%catalog/" data-car-back>Каталог</a></li>
+              <li><span aria-current="page" data-car-crumb>Авто</span></li>
+            </ol>
+          </nav>
+          <div class="vh__grid grid" data-car-top>
+            <div class="vh__gallery" data-gallery>
+              <div class="gal gal--skeleton" aria-hidden="true">
+                <div class="gal__stage"><div class="gal__sk"></div></div>
+                <div class="gal__thumbs gal__thumbs--sk"><span></span><span></span><span></span><span></span><span></span></div>
+              </div>
+            </div>
+            <aside class="vh__aside" data-aside>
+              <div class="vpanel vpanel--skeleton" aria-hidden="true">
+                <span class="sk sk--badge"></span>
+                <span class="sk sk--h1"></span>
+                <span class="sk sk--line"></span>
+                <span class="sk sk--price"></span>
+                <span class="sk sk--facts"></span>
+                <span class="sk sk--btn"></span>
+                <span class="sk sk--btn"></span>
+              </div>
+              <h1 class="sr-only" id="car-title" data-car-title>Авто</h1>
+            </aside>
+            <div class="vh__details" data-details hidden></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section car-similar" id="similar" aria-labelledby="similar-h" data-similar hidden>
+        <div class="container">
+          <hr class="rule car-similar__rule" />
+          <div class="car-similar__head" data-reveal>
+            <h2 class="t-h2" id="similar-h">Схожі автомобілі</h2>
+            <p class="car-similar__meta" data-similar-meta></p>
+          </div>
+          <div class="card-grid car-similar__grid" data-similar-grid></div>
+          <div class="car-similar__sentinel" data-similar-sentinel aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <noscript>
+        <section class="section">
+          <div class="container">
+            <div class="state">
+              <p class="state__title">Увімкніть JavaScript</p>
+              <p class="state__text">Сторінка авто завантажує фото та характеристики з каталогу. Без JavaScript перегляньте <a href="%BASE%catalog/">каталог</a> або зателефонуйте нам.</p>
+            </div>
+          </div>
+        </section>
+      </noscript>
+    </main>
+
+    <div class="car-bar" data-car-bar hidden></div>
+
+    <dialog class="lb" data-lightbox aria-label="Фото автомобіля">
+      <div class="lb__top">
+        <p class="lb__title" data-lb-title></p>
+        <p class="lb__count" aria-live="polite" data-lb-count></p>
+        <button class="lb__close" type="button" data-lb-close aria-label="Закрити перегляд фото"><svg class="icon" aria-hidden="true"><use href="#i-close" /></svg></button>
+      </div>
+      <div class="lb__track" data-lb-track data-lenis-prevent tabindex="-1"></div>
+      <button class="lb__nav lb__nav--prev" type="button" data-lb-prev aria-label="Попереднє фото"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left" /></svg></button>
+      <button class="lb__nav lb__nav--next" type="button" data-lb-next aria-label="Наступне фото"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right" /></svg></button>
+    </dialog>
+    <!--#include footer-->
+  </body>
+</html>
