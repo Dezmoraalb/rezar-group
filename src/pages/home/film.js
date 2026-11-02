@@ -146,15 +146,14 @@ export function initFilm({ reduced, tier, scroll }) {
     end: 'bottom bottom',
     scrub: tier === 'high' ? 0.6 : true,
     animation: tl,
+    // the letterbox top bar is the film's own header: the site header steps aside while the stage is on screen
+    onToggle: (self) => document.documentElement.toggleAttribute('data-film-on', self.isActive),
   });
   hud();
 
-  // act I is on screen while the section scrolls in: its copy rises as the stage arrives
-  gsap.fromTo(
-    [...acts[0].children],
-    { y: 56, opacity: 0 },
-    { y: 0, opacity: 1, stagger: 0.05, ease: 'none', scrollTrigger: { trigger: root, start: 'top 72%', end: 'top 8%', scrub: 0.5 } },
-  );
+  // act I is on screen while the section scrolls in: the act block itself rises as the stage arrives (the block, not
+  // its children — those belong to the main timeline, and two tweens on one element fight after a scroll jump)
+  gsap.fromTo(acts[0], { y: 72, opacity: 0 }, { y: 0, opacity: 1, ease: 'none', scrollTrigger: { trigger: root, start: 'top 72%', end: 'top 8%', scrub: 0.5 } });
 
   $('[data-film-skip]', root)?.addEventListener('click', (e) => {
     const next = root.nextElementSibling;

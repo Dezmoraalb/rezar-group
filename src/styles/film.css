@@ -341,3 +341,7 @@ html.js .film.is-live .film__skip:hover { background: var(--white); color: var(-
 @media (min-width: 768px) and (max-width: 1023px) {
   .film__credit { display: none; }
 }
+
+/* while the film plays its top bar is the header: the site header slides away (unless the menu or keyboard focus is in it) */
+html[data-film-on]:not([data-menu-open]) .site-header:not(:focus-within) { translate: 0 calc(-100% - var(--header-top) - 12px); }
+html[data-film-on]:not([data-menu-open]) .site-header:not(:focus-within) .site-header__panel { box-shadow: none !important; }
