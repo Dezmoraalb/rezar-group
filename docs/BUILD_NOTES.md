@@ -256,3 +256,15 @@ fillers (`scripts/photo-catalog.mjs`).
   + note, footer and home teaser wording; availability is never presented as confirmed.
 * The cross-document view-transition opt-in is inline in `head.html` (Chrome decided before the external CSS was in
   and aborted with an uncaught «ViewTransition opt-in disabled»).
+
+## Кіно-шар головної (порт nbtire «Нічний рейс»)
+
+* **Інтро hero** — раз за сесію (`html.intro` у head.html до першого кадру): леттербокс 2.39:1 з таймкодом і «Rezar Group
+  представляє» розʼїжджається, поки H1 піднімається. Текст читається з першого кадру, будь-який ввід пропускає інтро.
+  LCP не змінився (Lighthouse mobile 0.92–0.93 до і після, LCP-елемент — фото hero).
+* **«Шлях авто»** (`src/pages/home/film.js`, `src/styles/film.css`) — 4 акти на скролі: Пошук → VIN-розшифровка
+  (WMI · VDS · VIS) → маршрут Нью-Джерсі → Клайпеда → Київ з кілометражем і живим «в дорозі» → одометр «в наявності».
+  Високий трек + CSS-sticky сцена: скрол нативний на всіх пристроях (без pin і scroll-jacking — урок nbtire).
+  Акти міняються жорсткою склейкою під 3-кадровий спалах; леттербокс = HUD (REC, таймкод за скролом, розділ, прогрес).
+  Під reduced motion / tier low — чотири статичні панелі.
+* `src/motion/odometer.js` — механічний одометр цифр (кожна цифра — барабан 0–9).

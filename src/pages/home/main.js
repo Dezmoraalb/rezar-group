@@ -1,9 +1,12 @@
 /** Home page entry. Owner: HOME builder (index.html + src/pages/home/** + src/styles/home.css). */
 import { boot } from '../../core/boot.js';
 import '../../styles/home.css';
+import '../../styles/film.css';
 import { initFx } from './fx.js';
 import { initSteps } from './steps.js';
 import { initLive } from './live.js';
+import { initFilm } from './film.js';
+import { initIntro } from './intro.js';
 
 const { tier, reduced, scroll } = boot();
 
@@ -15,7 +18,9 @@ const safe = (name, fn) => {
     console.error(`[home] ${name}`, err);
   }
 };
+safe('intro', () => initIntro({ reduced }));
 safe('fx', () => initFx({ tier, reduced }));
+safe('film', () => initFilm({ tier, reduced, scroll }));
 safe('steps', () => initSteps({ tier, reduced, scroll }));
 safe('live', () => initLive({ reduced, scroll }));
 

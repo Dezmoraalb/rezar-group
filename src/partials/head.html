@@ -16,6 +16,8 @@
         c.add('js');
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) c.add('reduced');
         try { if (document.referrer && new URL(document.referrer).origin === location.origin) c.add('nav-in'); } catch (e) {}
+        /* html.intro: the home hero opens its letterbox once per browser session (home.css; main.js marks it seen) */
+        try { if (!sessionStorage.getItem('rz-intro')) c.add('intro'); } catch (e) {}
         /* cross-document view transitions (motion.css): Chrome may abort one (e.g. «Назад» restored from bfcache or a
            fast second click) and rejects its promises — that is harmless, keep it out of the console as an error */
         var quiet = function (e) {

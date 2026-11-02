@@ -588,3 +588,49 @@ html.mo .home-new__rail.is-wait > .card { opacity: 0; }
 
 /* magnetic buttons: fx.js eases the `translate` property (composes with the :active scale transform) */
 html.reduced [data-magnetic] { translate: none !important; }
+
+/* ---------- hero letterbox intro (nbtire «Нічний рейс»): once per session the hero opens like a film frame —
+   2.39:1 bars with a running timecode and «Rezar Group представляє» slide away while the H1 rises.
+   The copy is readable from the first paint (bars cover only the frame edges); html.intro is set in head.html. ---- */
+.home-hero__lb { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  html.js.intro:not(.reduced) .home-hero__lb {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .home-hero__bar {
+    position: absolute;
+    inset-inline: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: clamp(8svh, calc((100svh - 100vw / 2.39) / 2), 13svh);
+    background: #050607;
+    font: 500 0.75rem/1 var(--ff-text);
+    font-style: normal;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgb(243 245 242 / 0.7);
+    animation: lb-open 1000ms var(--ease-in-out) 1150ms both;
+  }
+  .home-hero__bar--top { top: 0; transform-origin: top; justify-content: flex-start; padding-inline: var(--margin); }
+  .home-hero__bar--bottom { bottom: 0; transform-origin: bottom; }
+  .home-hero__tc { opacity: 0; animation: lb-fade 1100ms linear 100ms both; }
+  .home-hero__credit { opacity: 0; animation: lb-fade 1100ms linear 150ms both; }
+  html.js.intro .home-hero__sweep { animation-delay: 1400ms; }
+}
+@keyframes lb-open { to { transform: scaleY(0); } }
+@keyframes lb-fade { 0% { opacity: 0; } 25% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+
+/* closing credit above the final CTA */
+.home-cta__credit {
+  margin-bottom: var(--s-4);
+  font: 500 0.8125rem/1.2 var(--ff-text);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(243 245 242 / 0.7);
+}

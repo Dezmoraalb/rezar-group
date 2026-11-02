@@ -1,0 +1,343 @@
+/* REZAR GROUP · «Шлях авто» — the home-page film (port of the nbtire «Нічний рейс» language: letterbox bars as UI,
+   timecode HUD, hard cuts under a white flash, scrubbed acts, film grain). Owner: HOME (src/pages/home/film.js).
+   Without JS / under reduced motion the four acts are plain stacked panels; html.js + .film.is-live turns the
+   section into a tall scroll track with a sticky 100svh stage (native scroll — no pin, no scroll-jacking). */
+
+.film {
+  --bar: clamp(44px, 8.5vh, 88px);
+  --film-black: #050607;
+  --hud: rgb(243 245 242 / 0.62);
+  position: relative;
+  background: var(--film-black);
+  color: var(--white);
+}
+
+/* ---------- static fallback: four stacked panels over the first shot ---------- */
+.film__stage { position: relative; overflow: hidden; }
+.film__shots { position: absolute; inset: 0; }
+.film__shot { position: absolute; inset: 0; margin: 0; opacity: 0; }
+.film__shot:first-child { opacity: 1; }
+.film__shot[data-shot="2"] img { filter: brightness(0.7); }
+.film__shot img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: var(--pos, 50% 50%);
+  transform-origin: 60% 50%;
+}
+.film__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(5 6 7 / 0.9) 0%, rgb(5 6 7 / 0.62) 42%, rgb(5 6 7 / 0.18) 78%, rgb(5 6 7 / 0.3) 100%),
+    linear-gradient(0deg, rgb(5 6 7 / 0.7) 0%, transparent 34%);
+}
+.film__sweep {
+  position: absolute;
+  inset: -10% -40%;
+  background: linear-gradient(100deg, transparent 40%, rgb(255 236 200 / 0.08) 47%, rgb(255 236 200 / 0.22) 50%, rgb(255 236 200 / 0.08) 53%, transparent 60%);
+  mix-blend-mode: overlay;
+  opacity: 0;
+  pointer-events: none;
+}
+.film__flash, .film__grain, .film__bar, .film__skip { display: none; }
+/* static panels: no photo stretched across four screens, the VIN shows fully decoded */
+.film:not(.is-live) .film__shots { display: none; }
+.film:not(.is-live) .vin__seg { --k: 1; color: var(--white); }
+.film:not(.is-live) .film__act + .film__act { border-top: 1px solid var(--line-ink); }
+.film:not(.is-live) .film__act { min-block-size: auto; padding-block: var(--section-y); }
+
+.film__acts { position: relative; z-index: 2; }
+.film__act {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s-5);
+  min-block-size: 100svh;
+  padding: var(--s-10) var(--margin);
+  max-inline-size: var(--max);
+  margin-inline: auto;
+}
+
+/* ---------- type ---------- */
+.film__kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 500 0.8125rem/1 var(--ff-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hud);
+}
+.film__kicker span {
+  padding: 6px 10px;
+  border: 1px solid rgb(243 245 242 / 0.28);
+  border-radius: 999px;
+  color: var(--white);
+}
+.film__h {
+  max-inline-size: 13ch;
+  font: 500 var(--fs-h1)/0.98 var(--ff-display);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.film__h .soft { color: rgb(243 245 242 / 0.5); }
+.film__h--s { max-inline-size: 18ch; font-size: var(--fs-h2); line-height: 1.05; }
+.film__p { max-inline-size: 34ch; font-size: var(--fs-lead); line-height: 1.45; color: rgb(243 245 242 / 0.78); }
+.film__p--s { font-size: var(--fs-body); max-inline-size: 40ch; }
+
+.film__coords { display: grid; gap: 10px; margin-top: var(--s-3); }
+.film__coords li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font: 500 0.875rem/1.2 var(--ff-text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--hud);
+}
+.film__coords b { font-weight: 600; color: var(--white); }
+.film__coords span { margin-left: 6px; letter-spacing: 0.02em; color: rgb(243 245 242 / 0.86); }
+.film__coords span::before { content: '— '; color: var(--hud); }
+
+/* VIN decode: the 17 characters, then a legend whose columns sit under their segment (3 · 6 · 8 chars) */
+.vin {
+  --vin-fs: clamp(1.75rem, 0.75rem + 4.4vw, 4.75rem);
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  column-gap: 0.32em;
+  font-size: var(--vin-fs);
+}
+/* code + legend flatten into one 3-column grid: every legend item sits exactly under its segment */
+.vin__code, .vin__legend { display: contents; }
+.vin__seg {
+  position: relative;
+  font: 500 1em/1 var(--ff-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  padding-bottom: 0.22em;
+  color: rgb(243 245 242 / 0.34);
+  transition: color 0.35s var(--ease-out);
+}
+.vin__seg::after {
+  content: '';
+  position: absolute;
+  inset: auto 0.06em 0 0;
+  block-size: 2px;
+  background: var(--lime);
+  transform: scaleX(var(--k, 0));
+  transform-origin: left;
+}
+.vin__seg.is-on { color: var(--white); }
+.vin__legend li {
+  position: relative;
+  margin-top: 14px;
+  padding: 16px 10px 0 0;
+  font: 400 max(0.8125rem, calc(var(--vin-fs) * 0.24))/1.3 var(--ff-text);
+  color: rgb(243 245 242 / 0.76);
+}
+.vin__legend li::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  inline-size: 1px;
+  block-size: 12px;
+  background: var(--lime);
+  transform: scaleY(var(--k, 1));
+  transform-origin: top;
+}
+.vin__legend b { display: block; margin-bottom: 2px; font-weight: 600; letter-spacing: 0.12em; color: var(--white); }
+
+.film__checks { display: flex; flex-wrap: wrap; gap: 8px 10px; max-inline-size: 640px; }
+.film__checks li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px 9px 10px;
+  border: 1px solid rgb(243 245 242 / 0.2);
+  border-radius: 999px;
+  background: rgb(5 6 7 / 0.4);
+  font-size: var(--fs-small);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.film__checks li::before {
+  content: '';
+  inline-size: 16px;
+  block-size: 16px;
+  border-radius: 50%;
+  background: var(--lime) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.3 2.3 4.7-5' fill='none' stroke='%230e1013' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 16px no-repeat;
+}
+
+/* route map */
+.route { inline-size: min(100%, 980px); block-size: auto; overflow: visible; }
+.route path { fill: none; stroke-linecap: round; }
+.route__ghost { stroke: rgb(243 245 242 / 0.16); stroke-width: 1.5; stroke-dasharray: 2 8; }
+.route__line { stroke: var(--lime); stroke-width: 2.5; }
+.route__line--eu { stroke: rgb(207 246 162 / 0.6); stroke-width: 2; }
+.route__pt circle { fill: var(--film-black); stroke: rgb(243 245 242 / 0.7); stroke-width: 1.5; }
+.route__pt text { font: 500 15px var(--ff-text); letter-spacing: 0.04em; fill: rgb(243 245 242 / 0.82); }
+.route__pt--home circle { fill: var(--lime); stroke: none; }
+.route__pt--home text { fill: var(--white); font-weight: 600; }
+.route__car { fill: var(--white); filter: drop-shadow(0 0 8px rgb(207 246 162 / 0.9)); }
+
+.film__odo { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--s-4) var(--s-7); }
+.film__km {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font: 500 var(--fs-h1)/1 var(--ff-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.film__km small { font: 500 var(--fs-lead) var(--ff-text); letter-spacing: 0.08em; color: var(--hud); }
+.film__live { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--white); }
+.film__live i { inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--st-transit); box-shadow: 0 0 0 4px rgb(242 200 121 / 0.18); }
+
+.film__giant {
+  font: 500 clamp(7rem, 2rem + 22vw, 22rem)/0.82 var(--ff-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+}
+.film__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: var(--s-3); }
+
+/* odometer digits (src/motion/odometer.js) */
+.odo { display: inline-flex; }
+.odo__col { display: inline-block; block-size: 1em; overflow: hidden; line-height: 1; }
+.odo__strip { display: flex; flex-direction: column; }
+.odo__strip > span { block-size: 1em; line-height: 1; }
+
+/* =====================================================================================================
+   LIVE: tall scroll track + sticky stage
+   ===================================================================================================== */
+html.js .film.is-live { block-size: 520svh; }
+html.js .film.is-live .film__stage {
+  position: sticky;
+  top: 0;
+  block-size: 100svh;
+  contain: layout paint;
+}
+html.js .film.is-live .film__shot { opacity: 0; visibility: hidden; }
+html.js .film.is-live .film__shot.is-on { opacity: 1; visibility: visible; }
+html.js .film.is-live .film__shot img { will-change: transform; }
+
+html.js .film.is-live .film__acts { position: absolute; inset: var(--bar) 0; }
+html.js .film.is-live .film__act {
+  position: absolute;
+  inset: 0;
+  min-block-size: 0;
+  padding-block: var(--s-6);
+  visibility: hidden;
+}
+html.js .film.is-live .film__act.is-on { visibility: visible; }
+html.js .film.is-live .film__act > * { will-change: transform, opacity; }
+
+/* letterbox bars = the HUD */
+html.js .film.is-live .film__bar {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  block-size: var(--bar);
+  padding-inline: var(--margin);
+  background: var(--film-black);
+  font: 500 0.75rem/1 var(--ff-text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hud);
+}
+.film__bar--top { top: 0; }
+.film__bar--bottom { bottom: 0; }
+.film__rec { display: inline-flex; align-items: center; gap: 8px; color: var(--white); }
+.film__rec i { inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--error-ink); animation: film-rec 1.2s steps(2, jump-none) infinite; }
+@keyframes film-rec { 50% { opacity: 0.15; } }
+.film__tc { min-inline-size: 11ch; color: var(--white); }
+.film__chapter { margin-left: auto; white-space: nowrap; overflow: hidden; color: var(--white); }
+.film__credit { min-inline-size: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.film__title-card { margin-left: auto; letter-spacing: 0.08em; text-transform: none; font-size: 0.875rem; color: var(--white); }
+.film__reel { display: flex; gap: 6px; }
+.film__reel li { position: relative; inline-size: clamp(28px, 4vw, 56px); block-size: 2px; background: rgb(243 245 242 / 0.18); overflow: hidden; }
+.film__reel li::after { content: ''; position: absolute; inset: 0; background: var(--lime); transform: scaleX(var(--p, 0)); transform-origin: left; }
+
+html.js .film.is-live .film__flash {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #fffaf0;
+  opacity: 0;
+  pointer-events: none;
+}
+html.js .film.is-live .film__flash.is-cut { animation: film-cut 190ms steps(3, jump-none) both; }
+@keyframes film-cut { 0% { opacity: 0.9; } 50% { opacity: 0.35; } 100% { opacity: 0; } }
+
+/* grain: an oversized noise tile jittered on the compositor (transform only) */
+html.js .film.is-live .film__grain {
+  display: block;
+  position: absolute;
+  inset: -50%;
+  z-index: 3;
+  background: var(--grain);
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  animation: film-grain 0.9s steps(6) infinite;
+}
+@keyframes film-grain {
+  0% { transform: translate(0, 0); }
+  17% { transform: translate(-6%, 4%); }
+  33% { transform: translate(5%, -7%); }
+  50% { transform: translate(-3%, 8%); }
+  67% { transform: translate(7%, 2%); }
+  83% { transform: translate(-8%, -4%); }
+}
+
+html.js .film.is-live .film__skip {
+  position: absolute;
+  right: var(--margin);
+  bottom: calc(var(--bar) + 16px);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px 8px 14px;
+  border: 1px solid rgb(243 245 242 / 0.24);
+  border-radius: 999px;
+  background: rgb(5 6 7 / 0.5);
+  font: 500 0.8125rem/1 var(--ff-text);
+  color: rgb(243 245 242 / 0.86);
+  text-decoration: none;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, color 0.2s;
+}
+html.js .film.is-live .film__skip:hover { background: var(--white); color: var(--ink); }
+
+/* ---------- phones: copy at the bottom of the frame, vertical veil, shorter track ---------- */
+@media (max-width: 767px) {
+  .film { --bar: clamp(40px, 6.5svh, 56px); }
+  .film__veil { background: linear-gradient(0deg, rgb(5 6 7 / 0.94) 0%, rgb(5 6 7 / 0.78) 46%, rgb(5 6 7 / 0.25) 78%, rgb(5 6 7 / 0.45) 100%); }
+  .film__act { justify-content: flex-end; gap: var(--s-4); padding-bottom: var(--s-8); }
+  .film__h { font-size: clamp(2.25rem, 1.2rem + 5vw, 3rem); }
+  .film__h--s { font-size: var(--fs-h3); }
+  .film__p { font-size: var(--fs-body); }
+  .film__coords li { font-size: 0.8125rem; }
+  .vin { --vin-fs: clamp(1.25rem, 5.6vw, 2rem); column-gap: 0.28em; }
+  .vin__legend li { padding-right: 4px; font-size: 0.75rem; }
+  html.js .film.is-live .film__bar { gap: var(--s-3); font-size: 0.6875rem; letter-spacing: 0.12em; }
+  .film__checks li { padding: 7px 11px 7px 8px; font-size: 0.875rem; }
+  .route__pt text { font-size: 26px; }
+  .film__km { font-size: 3rem; }
+  .film__giant { font-size: clamp(6rem, 2rem + 24vw, 9.5rem); }
+  html.js .film.is-live { block-size: 460svh; }
+  .film__credit, .film__title-card { display: none; }
+  .film__reel { margin-left: auto; }
+  html.js .film.is-live .film__skip { top: calc(var(--bar) + 12px); bottom: auto; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .film__credit { display: none; }
+}
